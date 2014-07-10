@@ -1,9 +1,24 @@
 package com.lcs.cai;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MyActivity extends Activity {
@@ -14,6 +29,13 @@ public class MyActivity extends Activity {
 		setContentView(R.layout.activity_my);
 		this.appTool = new AppTool(this);
 
+		Log.i("lcs" , this.appTool.getAllApp().toString());
+		GridView appView = (GridView) this.findViewById(R.id.appView);
+		List<ResolveInfo> appList = (List<ResolveInfo>)this.appTool.getAllApp();
+
+		appView.setAdapter(new MyAdapter( this, appList , getPackageManager() ));
+		appView.setNumColumns(3);//
+	//	appView.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -33,5 +55,42 @@ public class MyActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+
+
+	private class MyAdapter extends  BaseAdapter{
+
+		private List<ResolveInfo> appList ;
+		private PackageManager packageManager;
+		private Context context;
+		public  MyAdapter(Context  context ,List<ResolveInfo> appList  , PackageManager packageManager){
+			this.appList = appList;
+			this.packageManager = packageManager;
+			this.context = context;
+		}
+
+		@Override
+		public int getCount() {
+			return this.appList.size();
+		}
+
+		@Override
+		public Object getItem(int i) {
+			return this.appList.get(i);
+		}
+
+		@Override
+		public long getItemId(int i) {
+			return 0;
+		}
+
+		@Override
+		public View getView(int i, View view, ViewGroup viewGroup) {
+			ImageButton btn = new ImageButton(this.context);
+			ResolveInfo res = this.appList.get(i);
+			btn.setImageDrawable(res.loadIcon( this.packageManager ));
+			return btn;
+		}
 	}
 }
