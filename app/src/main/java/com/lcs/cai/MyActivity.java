@@ -1,27 +1,27 @@
 package com.lcs.cai;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class MyActivity extends Activity {
+public class MyActivity extends Activity  {
 	private AppTool appTool;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,16 @@ public class MyActivity extends Activity {
 
 		appView.setAdapter(new MyAdapter( this, appList , getPackageManager() ));
 		appView.setNumColumns(3);//
-	//	appView.setOnItemClickListener(this);
+		appView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+				Intent intent = (Intent) view.getTag();
+				startActivity(intent);
+			}
+		});
+		for( int i = 0 ; i < 100 ; i++ ){
+			Log.i("a","asd : " + i);
+		}
 	}
 
 	@Override
@@ -56,8 +65,6 @@ public class MyActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-
 
 	private class MyAdapter extends  BaseAdapter{
 
@@ -87,9 +94,14 @@ public class MyActivity extends Activity {
 
 		@Override
 		public View getView(int i, View view, ViewGroup viewGroup) {
-			ImageButton btn = new ImageButton(this.context);
+			ImageView btn = new ImageView(this.context);
 			ResolveInfo res = this.appList.get(i);
-			btn.setImageDrawable(res.loadIcon( this.packageManager ));
+			btn.setImageDrawable(res.loadIcon(this.packageManager));
+
+			Intent intent = new Intent();
+			intent.setComponent(new ComponentName( res.activityInfo.packageName , res.activityInfo.name ));
+
+			btn.setTag(intent);
 			return btn;
 		}
 	}
