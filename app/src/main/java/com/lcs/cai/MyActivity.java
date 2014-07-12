@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,8 +16,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import com.lcs.cai.dao.AppDao;
+import com.lcs.cai.pojo.App;
 
 import java.util.List;
 
@@ -34,17 +37,13 @@ public class MyActivity extends Activity  {
 		List<ResolveInfo> appList = (List<ResolveInfo>)this.appTool.getAllApp();
 
 		appView.setAdapter(new MyAdapter( this, appList , getPackageManager() ));
-		appView.setNumColumns(3);//
+	//	appView.setNumColumns(3);//
 		appView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-				Intent intent = (Intent) view.getTag();
-				startActivity(intent);
+				startActivity((Intent) view.getTag());
 			}
 		});
-		for( int i = 0 ; i < 100 ; i++ ){
-			Log.i("a","asd : " + i);
-		}
 	}
 
 	@Override
@@ -71,10 +70,14 @@ public class MyActivity extends Activity  {
 		private List<ResolveInfo> appList ;
 		private PackageManager packageManager;
 		private Context context;
+		private AppDao appDao;
 		public  MyAdapter(Context  context ,List<ResolveInfo> appList  , PackageManager packageManager){
 			this.appList = appList;
 			this.packageManager = packageManager;
 			this.context = context;
+			this.appDao = new AppDao(context);
+		//	this.appDao.onCreate( this.appDao.getWritableDatabase() );
+			Log.i("abs",this.appDao.get(5).toString());
 		}
 
 		@Override
@@ -101,6 +104,10 @@ public class MyActivity extends Activity  {
 			Intent intent = new Intent();
 			intent.setComponent(new ComponentName( res.activityInfo.packageName , res.activityInfo.name ));
 
+			App app = new App();
+			app.setName( res.activityInfo.name );
+
+		//	this.appDao.insert(app);
 			btn.setTag(intent);
 			return btn;
 		}
