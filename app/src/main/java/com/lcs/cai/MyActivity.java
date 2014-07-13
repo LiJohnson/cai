@@ -77,7 +77,7 @@ public class MyActivity extends Activity  {
 			this.context = context;
 			this.appDao = new AppDao(context);
 		//	this.appDao.onCreate( this.appDao.getWritableDatabase() );
-			Log.i("abs",this.appDao.get(5).toString());
+		//	Log.i("abs",this.appDao.get(5).toString());
 		}
 
 		@Override
