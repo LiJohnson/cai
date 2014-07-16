@@ -26,6 +26,6 @@ public class AppTool {
 		//排序
 		Collections.sort(apps, new ResolveInfo.DisplayNameComparator(packageManager));
 
-		return apps;
+		return apps.subList(0,apps.size()/2);
 	}
 }

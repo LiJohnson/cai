@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.lcs.cai.dao.AppDao;
 import com.lcs.cai.pojo.App;
@@ -33,17 +35,18 @@ public class MyActivity extends Activity  {
 		this.appTool = new AppTool(this);
 
 		Log.i("lcs" , this.appTool.getAllApp().toString());
-		GridView appView = (GridView) this.findViewById(R.id.appView);
+		ListView appView = (ListView) this.findViewById(R.id.appView);
 		List<ResolveInfo> appList = (List<ResolveInfo>)this.appTool.getAllApp();
-
+		/*
 		appView.setAdapter(new MyAdapter( this, appList , getPackageManager() ));
-	//	appView.setNumColumns(3);//
+		//appView.setNumColumns(3);//
 		appView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 				startActivity((Intent) view.getTag());
 			}
 		});
+		*/
 	}
 
 	@Override

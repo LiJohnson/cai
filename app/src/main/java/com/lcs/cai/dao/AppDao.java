@@ -12,5 +12,4 @@ public class AppDao extends BaseDao<App> {
 	public AppDao( Context context){
 		super(App.class , context);
 	}
-
 }
