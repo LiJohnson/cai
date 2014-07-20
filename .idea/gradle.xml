@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="/media/lcs/lcs/github/cai" />
+            <option value="/media/lcs/lcs/github/cai/app" />
           </set>
         </option>
       </GradleProjectSettings>

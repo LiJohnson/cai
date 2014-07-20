@@ -37,8 +37,8 @@ public class MyActivity extends Activity  {
 		Log.i("lcs" , this.appTool.getAllApp().toString());
 		ListView appView = (ListView) this.findViewById(R.id.appView);
 		List<ResolveInfo> appList = (List<ResolveInfo>)this.appTool.getAllApp();
-		/*
-		appView.setAdapter(new MyAdapter( this, appList , getPackageManager() ));
+
+		appView.setAdapter(new MyAdapter( new AppDao(this), appList ));
 		//appView.setNumColumns(3);//
 		appView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
 			@Override
@@ -46,7 +46,6 @@ public class MyActivity extends Activity  {
 				startActivity((Intent) view.getTag());
 			}
 		});
-		*/
 	}
 
 	@Override
@@ -71,16 +70,11 @@ public class MyActivity extends Activity  {
 	private class MyAdapter extends  BaseAdapter{
 
 		private List<ResolveInfo> appList ;
-		private PackageManager packageManager;
-		private Context context;
 		private AppDao appDao;
-		public  MyAdapter(Context  context ,List<ResolveInfo> appList  , PackageManager packageManager){
+
+		public  MyAdapter( AppDao appDao  ,List<ResolveInfo> appList ){
 			this.appList = appList;
-			this.packageManager = packageManager;
-			this.context = context;
-			this.appDao = new AppDao(context);
-		//	this.appDao.onCreate( this.appDao.getWritableDatabase() );
-		//	Log.i("abs",this.appDao.get(5).toString());
+			this.appDao = appDao;
 		}
 
 		@Override
@@ -95,14 +89,18 @@ public class MyActivity extends Activity  {
 
 		@Override
 		public long getItemId(int i) {
-			return 0;
+			return i;
 		}
 
 		@Override
 		public View getView(int i, View view, ViewGroup viewGroup) {
-			ImageView btn = new ImageView(this.context);
+			if( view != null ){
+				return view;
+			}
+			Context context = viewGroup.getContext();
+			ImageView btn = new ImageView(context);
 			ResolveInfo res = this.appList.get(i);
-			btn.setImageDrawable(res.loadIcon(this.packageManager));
+			btn.setImageDrawable(res.loadIcon(context.getPackageManager()));
 
 			Intent intent = new Intent();
 			intent.setComponent(new ComponentName( res.activityInfo.packageName , res.activityInfo.name ));
